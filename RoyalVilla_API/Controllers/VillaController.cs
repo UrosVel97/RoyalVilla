@@ -108,5 +108,33 @@ public class VillaController : ControllerBase
 
     #endregion
 
+    #region DELETE ENDPOINTS
+
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult<Villa>> DeleteVilla([FromRoute] int id)
+    {
+        if (id <= 0)
+        {
+            return BadRequest("Invalid villa data or ID");
+        }
+
+        var existingVilla = await _db.Villas.FindAsync(id);
+
+        if (existingVilla == null)
+        {
+            return NotFound($"Villa with ID {id} not found");
+        }
+
+    
+        _db.Villas.Remove(existingVilla);
+
+
+        await _db.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    #endregion
+
 
 }
