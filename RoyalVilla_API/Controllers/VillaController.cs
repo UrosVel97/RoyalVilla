@@ -25,57 +25,48 @@ public class VillaController : ControllerBase
     #region GET ENDPOINTS
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<VillaDTO>>> GetVillas()
+    [ProducesResponseType(typeof(ApiResponse<List<VillaDTO>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<IEnumerable<VillaDTO>>>> GetVillas()
     {
         var villas = await _db.Villas.ToListAsync();
-        return Ok(_mapper.Map<List<VillaDTO>>(villas));
+
+        var villaDTOs = _mapper.Map<List<VillaDTO>>(villas);
+
+        return Ok(ApiResponse<IEnumerable<VillaDTO>>.Ok(villaDTOs, "Villas retrieved successfully"));
     }
 
 
     [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(ApiResponse<VillaDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ApiResponse<VillaDTO>>> GetVillaById(int id)
     {
         try
         {
             if(id <= 0)
             {
-                return new ApiResponse<VillaDTO>()
-                {
-                    StatusCode = 400,
-                    Errors = "Villa ID must be greater than 0",
-                    Success = false,
-                    Message = "Bad request"
-                };
-
+                return NotFound(ApiResponse<object>.NotFound("Villa ID must be greater than 0"));
             }    
 
             var villa = await _db.Villas.FirstOrDefaultAsync(v => v.Id == id);
             if (villa == null)
             {
-                return NotFound($"Villa with ID {id} not found");
+                return NotFound(ApiResponse<object>.NotFound($"Villa with ID {id} not found"));
             }
 
             var villaDTO = _mapper.Map<VillaDTO>(villa);
 
-            return new ApiResponse<VillaDTO>()
-            {
-                StatusCode = 200,
-                Data = villaDTO,
-                Success = true,
-                Message = "Record retrieved successfully"
-            };
+
+            return Ok(ApiResponse<VillaDTO>.Ok(villaDTO, $"Villa with ID {id} retrieved successfully"));
 
         }
         catch (Exception ex)
         {
-            return new ApiResponse<VillaDTO>()
-            {
-                StatusCode = 500,
-                Errors = ex.Message,
-                Success = false,
-                Message = "A server side error occurred while processing the request"
-            };
-
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                ApiResponse<VillaDTO>.Error(500, $"An error occurred while retrieving the villa with ID {id}: {ex.Message}"));
         }
         
     }
@@ -85,25 +76,31 @@ public class VillaController : ControllerBase
     #region POST ENDPOINTS
 
     [HttpPost]
-    public async Task<ActionResult<VillaDTO>> CreateVilla(VillaCreateDTO villaDTO)
+    [ProducesResponseType(typeof(ApiResponse<VillaDTO>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<VillaDTO>>> CreateVilla(VillaCreateDTO villaDTO)
     {
         if(villaDTO == null)
         {
-            return BadRequest("Villa data is null");
+            return BadRequest(ApiResponse<object>.BadRequest("Villa data is null"));
         }
 
         var duplicateVilla = await _db.Villas.FirstOrDefaultAsync(v => v.Name.ToLower() == villaDTO.Name.ToLower());
+
         if (duplicateVilla != null)
         {
-            return Conflict($"Villa with name {villaDTO.Name} already exists");
+            return Conflict(ApiResponse<object>.Conflict($"Villa with name {villaDTO.Name} already exists"));
         }
 
         var villa = _mapper.Map<Villa>(villaDTO);
 
         await _db.Villas.AddAsync(villa);
+
         await _db.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetVillaById), new { id = villa.Id }, _mapper.Map<VillaDTO>(villa));
+        return CreatedAtAction(nameof(GetVillaById), new { id = villa.Id }, ApiResponse<VillaDTO>.CreatedAt(_mapper.Map<VillaDTO>(villa), $"Villa with ID {villa.Id} created successfully"));
     }
 
     #endregion
@@ -111,43 +108,49 @@ public class VillaController : ControllerBase
     #region PUT ENDPOINTS
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<VillaUpdateDTO>> UpdateVilla([FromRoute] int id, [FromBody] VillaUpdateDTO villaDTO)
+    [ProducesResponseType(typeof(ApiResponse<VillaDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<VillaDTO>>> UpdateVilla([FromRoute] int id, [FromBody] VillaUpdateDTO villaDTO)
     {
         try
         {
             if (villaDTO == null || id <= 0)
             {
-                return BadRequest("Invalid villa data or ID");
+                return BadRequest(ApiResponse<VillaUpdateDTO>.BadRequest("Invalid villa data or ID"));
             }
 
             var existingVilla = await _db.Villas.FindAsync(id);
 
             if (existingVilla == null)
             {
-                return NotFound($"Villa with ID {id} not found");
+                return NotFound(ApiResponse<VillaUpdateDTO>.NotFound($"Villa with ID {id} not found"));
             }
 
             // Check if the name already exists in the database
             if (await _db.Villas.AnyAsync(v => v.Name == villaDTO.Name && v.Id != id))
             {
-                return Conflict($"Villa with name {villaDTO.Name} already exists");
+                return Conflict(ApiResponse<VillaUpdateDTO>.Conflict($"Villa with name {villaDTO.Name} already exists"));
             }
 
 
             _mapper.Map(villaDTO, existingVilla);
             existingVilla.UpdatedDate = DateTime.Now;
 
+
             _db.Villas.Update(existingVilla);
 
             await _db.SaveChangesAsync();
 
-            return Ok(_mapper.Map<VillaDTO>(existingVilla));
+            return Ok(ApiResponse<VillaDTO>.Ok(_mapper.Map<VillaDTO>(existingVilla), $"Villa with ID {id} updated successfully"));
         }
         catch (Exception ex)
         {
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
-                $"An error occurred while updating the villa with id {id}");
+                ApiResponse<VillaDTO>.Error(500, $"An error occurred while updating the villa with ID {id}: {ex.Message}"));
         }
     }
 
@@ -156,18 +159,22 @@ public class VillaController : ControllerBase
     #region DELETE ENDPOINTS
 
     [HttpDelete("{id:int}")]
-    public async Task<ActionResult> DeleteVilla([FromRoute] int id)
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<object>>> DeleteVilla([FromRoute] int id)
     {
         if (id <= 0)
         {
-            return BadRequest("Invalid villa data or ID");
+            return BadRequest(ApiResponse<object>.BadRequest("Invalid villa data or ID"));
         }
 
         var existingVilla = await _db.Villas.FindAsync(id);
 
         if (existingVilla == null)
         {
-            return NotFound($"Villa with ID {id} not found");
+            return NotFound(ApiResponse<object>.NotFound($"Villa with ID {id} not found"));
         }
 
     
@@ -176,7 +183,7 @@ public class VillaController : ControllerBase
 
         await _db.SaveChangesAsync();
 
-        return NoContent();
+        return Ok(ApiResponse<object>.NoContent($"Villa with ID {id} deleted successfully"));
     }
 
     #endregion
