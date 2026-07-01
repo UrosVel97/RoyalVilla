@@ -7,7 +7,7 @@ public class ApiResponse<TData>
     public int StatusCode { get; set; }
     public string Message { get; set; } = string.Empty;
 
-    public TData Data { get; set; }
+    public TData Data { get; set; } =default!;
 
     public object? Errors { get; set; }
 
@@ -25,7 +25,7 @@ public class ApiResponse<TData>
             Success = success,
             StatusCode = statusCode,
             Message = message,
-            Data = data,
+            Data = data!,
             Errors = errors
         };
     }
