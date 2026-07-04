@@ -77,6 +77,13 @@ builder.Services.AddAutoMapper(o =>
     o.CreateMap<Villa, VillaUpdateDTO>().ReverseMap();
     o.CreateMap<Villa, VillaDTO>().ReverseMap();
     o.CreateMap<User, UserDTO>().ReverseMap();
+    o.CreateMap<VillaAmenities, VillaAmenitiesDTO>()
+        .ForMember(dest => dest.VillaName, opt => opt.MapFrom(src => src.Villa != null ? src.Villa.Name : null))
+        .ReverseMap()
+        .ForMember(dest => dest.Villa, opt => opt.Ignore());
+    o.CreateMap<VillaAmenities, VillaAmenitiesCreateDTO>().ReverseMap();
+    o.CreateMap<VillaAmenitiesDTO, VillaAmenitiesCreateDTO>().ReverseMap();
+
 });
 
 builder.Services.AddScoped<IAuthService, AuthService>();
