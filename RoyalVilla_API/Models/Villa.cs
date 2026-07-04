@@ -23,4 +23,6 @@ public class Villa
     public DateTime CreatedDate { get; set; }
 
     public DateTime UpdatedDate { get; set; }
+
+    public ICollection<VillaAmenities>? Amenities { get; set; }
 }
