@@ -83,6 +83,7 @@ builder.Services.AddAutoMapper(o =>
         .ForMember(dest => dest.Villa, opt => opt.Ignore());
     o.CreateMap<VillaAmenities, VillaAmenitiesCreateDTO>().ReverseMap();
     o.CreateMap<VillaAmenitiesDTO, VillaAmenitiesCreateDTO>().ReverseMap();
+    o.CreateMap<VillaAmenities, VillaAmenitiesUpdateDTO>().ReverseMap();
 
 });
 
