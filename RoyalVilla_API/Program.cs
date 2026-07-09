@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using RoyalVilla_API.Data;
-using RoyalVilla_API.Data.DTOs;
+using RoyalVIlla.DTO;
 using RoyalVilla_API.Models;
 using RoyalVilla_API.Services;
 using Scalar.AspNetCore;
@@ -67,6 +67,7 @@ builder.Services.AddOpenApi(options =>
     });
 });
 
+builder.Services.AddCors();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -100,6 +101,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
+app.UseCors(o => o.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("*"));
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

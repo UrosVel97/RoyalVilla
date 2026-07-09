@@ -2,7 +2,7 @@
 using RoyalVilla_API.Data;
 using RoyalVilla_API.Models;
 using Microsoft.EntityFrameworkCore;
-using RoyalVilla_API.Data.DTOs;
+using RoyalVIlla.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 

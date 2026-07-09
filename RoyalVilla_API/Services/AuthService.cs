@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RoyalVilla_API.Data;
-using RoyalVilla_API.Data.DTOs;
 using RoyalVilla_API.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using RoyalVIlla.DTO;
 
 namespace RoyalVilla_API.Services
 {
