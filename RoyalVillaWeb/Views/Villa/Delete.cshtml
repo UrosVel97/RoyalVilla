@@ -1,0 +1,79 @@
+@model RoyalVIlla.DTO.VillaDTO
+
+@{
+    ViewData["Title"] = "Delete Villa";
+}
+
+<section class="villa-manage-header d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4">
+    <div>
+        <span class="section-eyebrow">Administration</span>
+        <h1 class="display-6 fw-bold mb-1">Delete villa</h1>
+        <p class="text-secondary mb-0">Please confirm you want to permanently remove this villa.</p>
+    </div>
+    <a class="btn btn-outline-secondary align-self-start" asp-controller="Villa" asp-action="Index">
+        <span aria-hidden="true">←</span> Back to list
+    </a>
+</section>
+
+<div class="alert alert-warning villa-alert" role="alert">
+    <span class="villa-alert__icon" aria-hidden="true">!</span>
+    <div><strong>This action cannot be undone.</strong> The villa will be permanently deleted.</div>
+</div>
+
+<div class="card border-0 shadow-sm villa-form-card">
+    <div class="row g-0">
+        <div class="col-12 col-md-5">
+            <div class="villa-delete__media h-100">
+                @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                {
+                    <img class="villa-delete__image" src="@Model.ImageUrl" alt="@Model.Name" />
+                }
+                else
+                {
+                    <div class="villa-delete__image villa-card__placeholder" role="img" aria-label="No image available for @Model.Name">
+                        <span>No image available</span>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-12 col-md-7">
+            <div class="card-body p-4 p-md-5">
+                <span class="villa-card__location">Royal Villa Collection</span>
+                <h2 class="h3 fw-bold mb-3">@Model.Name</h2>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Details))
+                {
+                    <p class="text-secondary">@Model.Details</p>
+                }
+
+                <dl class="row villa-delete__facts mb-4">
+                    <dt class="col-5">Rate / night</dt>
+                    <dd class="col-7">@Model.Rate.ToString("C0")</dd>
+
+                    <dt class="col-5">Occupancy</dt>
+                    <dd class="col-7">@Model.Occupancy guests</dd>
+
+                    <dt class="col-5">Size</dt>
+                    <dd class="col-7">@Model.Sqft.ToString("N0") sq ft</dd>
+                </dl>
+
+                <form asp-controller="Villa" asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Name" />
+                    <input type="hidden" asp-for="Details" />
+                    <input type="hidden" asp-for="Rate" />
+                    <input type="hidden" asp-for="Sqft" />
+                    <input type="hidden" asp-for="Occupancy" />
+                    <input type="hidden" asp-for="ImageUrl" />
+
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="submit" class="btn btn-danger">
+                            <span aria-hidden="true">🗑</span> Delete villa
+                        </button>
+                        <a class="btn btn-light" asp-controller="Villa" asp-action="Index">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
