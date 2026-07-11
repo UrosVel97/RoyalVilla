@@ -1,4 +1,6 @@
 using RoyalVIlla.DTO;
+using RoyalVillaWeb.Services;
+using RoyalVillaWeb.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,16 @@ builder.Services.AddAutoMapper(o =>
     o.CreateMap<VillaDTO, VillaCreateDTO>().ReverseMap();
     o.CreateMap<VillaDTO, VillaUpdateDTO>().ReverseMap();
 });
+
+builder.Services.AddHttpClient("RoyalVillaAPI", client =>
+{
+    var villaApiUrl = builder.Configuration.GetValue<string>("ServiceUrls:VillaAPI");
+    client.BaseAddress = new Uri(villaApiUrl);
+
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
+builder.Services.AddScoped<IVillaService, VillaService>();
 
 var app = builder.Build();
 

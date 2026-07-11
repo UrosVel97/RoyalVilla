@@ -28,7 +28,7 @@ public class BaseService : IBaseService
             var client = _httpClient.CreateClient("RoyalVillaAPI");
             var message = new HttpRequestMessage
             {
-                RequestUri = new Uri(apiRequest.Url!),
+                RequestUri = new Uri(apiRequest.Url!, UriKind.Relative),
                 Method = GetHttpMethod(apiRequest.ApiType)
             };
 

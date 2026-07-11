@@ -6,11 +6,10 @@ namespace RoyalVillaWeb.Services;
 
 public class VillaService : BaseService, IVillaService
 {
-    private readonly string _villaUrl;
     private const string ApiEndpoint = "/api/villa";
+
     public VillaService(IHttpClientFactory httpClient, IConfiguration configuration) : base(httpClient)
     {
-        _villaUrl = configuration.GetValue<string>("ServiceUrls:VillaAPI") ?? throw new ArgumentNullException("VillaAPI URL is not configured.");
     }
 
     public Task<T?> CreateAsync<T>(VillaCreateDTO dto, string token)
@@ -19,7 +18,7 @@ public class VillaService : BaseService, IVillaService
         {
             ApiType = SD.ApiType.POST,
             Data = dto,
-            Url = $"{_villaUrl}{ApiEndpoint}",
+            Url = $"{ApiEndpoint}",
             Token = token
         });
     }
@@ -29,7 +28,7 @@ public class VillaService : BaseService, IVillaService
         return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.DELETE,
-            Url = $"{_villaUrl}{ApiEndpoint}/{id}",
+            Url = $"{ApiEndpoint}/{id}",
             Token = token
         });
     }
@@ -39,7 +38,7 @@ public class VillaService : BaseService, IVillaService
         return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.GET,
-            Url = $"{_villaUrl}{ApiEndpoint}",
+            Url = $"{ApiEndpoint}",
             Token = token
         });
     }
@@ -49,7 +48,7 @@ public class VillaService : BaseService, IVillaService
         return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.GET,
-            Url = $"{_villaUrl}{ApiEndpoint}/{id}",
+            Url = $"{ApiEndpoint}/{id}",
             Token = token
         });
     }
@@ -60,7 +59,7 @@ public class VillaService : BaseService, IVillaService
         {
             ApiType = SD.ApiType.PUT,
             Data = dto,
-            Url = $"{_villaUrl}{ApiEndpoint}/{dto.Id}",
+            Url = $"{ApiEndpoint}/{dto.Id}",
             Token = token
         });
     }

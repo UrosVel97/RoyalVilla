@@ -1,8 +1,117 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IReadOnlyList<RoyalVIlla.DTO.VillaDTO>
+
+@{
+    ViewData["Title"] = "Luxury Villas";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (TempData["success"] is string successMessage)
+{
+    <div class="alert alert-success alert-dismissible fade show villa-alert" role="alert">
+        <span class="villa-alert__icon" aria-hidden="true">✓</span>
+        <div><strong>Success!</strong> @successMessage</div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["error"] is string errorMessage)
+{
+    <div class="alert alert-danger alert-dismissible fade show villa-alert" role="alert">
+        <span class="villa-alert__icon" aria-hidden="true">!</span>
+        <div><strong>Something went wrong.</strong> @errorMessage</div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<section class="villa-hero mb-5">
+    <div class="villa-hero__glow villa-hero__glow--one"></div>
+    <div class="villa-hero__glow villa-hero__glow--two"></div>
+    <div class="villa-hero__content">
+        <span class="villa-hero__eyebrow"><span></span>Your private escape awaits</span>
+        <h1>Extraordinary stays,<br /><em>beautifully curated.</em></h1>
+        <p>Discover exceptional villas where thoughtful design, complete privacy, and remarkable destinations come together.</p>
+        <div class="d-flex flex-wrap align-items-center gap-3">
+            <a class="btn villa-hero__button" href="#villas">
+                Explore villas
+                <span aria-hidden="true">→</span>
+            </a>
+            <span class="villa-hero__note">Hand-picked for exceptional stays</span>
+        </div>
+    </div>
+    <div class="villa-hero__stats" aria-label="Royal Villa highlights">
+        <div><strong>@Model.Count</strong><span>Curated villas</span></div>
+        <div><strong>24/7</strong><span>Guest support</span></div>
+        <div><strong>5★</strong><span>Premium stays</span></div>
+    </div>
+</section>
+
+<section id="villas" class="pb-4">
+    <div class="villa-section-heading d-flex flex-column flex-sm-row align-items-sm-end justify-content-between gap-3 mb-4">
+        <div>
+            <span class="section-eyebrow">Exclusive stays</span>
+            <h2 class="display-6 fw-bold mb-1">Find your perfect retreat</h2>
+            <p class="text-secondary mb-0">Exceptional homes, selected for unforgettable moments.</p>
+        </div>
+        <span class="property-count">@Model.Count @(Model.Count == 1 ? "property" : "properties")</span>
+    </div>
+
+    @if (Model.Count > 0)
+    {
+        <div class="row g-4">
+            @for (var i = 0; i < Model.Count; i++)
+            {
+                var villa = Model[i];
+                <div class="col-12 col-md-6 col-xl-4">
+                    <article class="card villa-card h-100 border-0 shadow-sm" style="animation-delay:@(i * 70)ms">
+                        <div class="villa-card__media">
+                            @if (!string.IsNullOrWhiteSpace(villa.ImageUrl))
+                            {
+                                <img class="card-img-top villa-card__image" src="@villa.ImageUrl" alt="@villa.Name" loading="lazy" />
+                            }
+                            else
+                            {
+                                <div class="villa-card__image villa-card__placeholder" role="img" aria-label="No image available for @villa.Name">
+                                    <span>No image available</span>
+                                </div>
+                            }
+                            <span class="villa-card__label">Featured</span>
+                        </div>
+
+                        <div class="card-body d-flex flex-column p-4">
+                            <div class="d-flex align-items-start justify-content-between gap-3 mb-2">
+                                <div>
+                                    <span class="villa-card__location">Royal Villa Collection</span>
+                                    <h3 class="h4 card-title mb-0">@villa.Name</h3>
+                                </div>
+                                <div class="villa-card__rate"><strong>@villa.Rate.ToString("C0")</strong><span>/ night</span></div>
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(villa.Details))
+                            {
+                                <p class="card-text text-secondary villa-card__details">@villa.Details</p>
+                            }
+
+                            <div class="villa-card__footer d-flex flex-wrap gap-3 mt-auto pt-3" aria-label="Villa details">
+                                <span class="villa-feature">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3ZM8 11c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3Zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13Zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5Z" /></svg>
+                                    @villa.Occupancy guests
+                                </span>
+                                <span class="villa-feature">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5v14h18V5H3Zm2 2h5v4H5V7Zm0 6h5v4H5v-4Zm14 4h-7v-4h7v4Zm0-6h-7V7h7v4Z" /></svg>
+                                    @villa.Sqft.ToString("N0") sq ft
+                                </span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="villa-empty-state text-center border rounded-4 p-5">
+            <div class="villa-empty-state__icon" aria-hidden="true">⌂</div>
+            <h3 class="h4">No villas available right now</h3>
+            <p class="text-secondary mb-0">Please check back soon for new destinations.</p>
+        </div>
+    }
+</section>

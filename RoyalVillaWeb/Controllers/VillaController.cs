@@ -1,28 +1,23 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using RoyalVIlla.DTO;
-using RoyalVillaWeb.Models;
 using RoyalVillaWeb.Services.IServices;
-using System.Diagnostics;
-using RoyalVIlla.DTO;
 
 namespace RoyalVillaWeb.Controllers
 {
-    public class HomeController : Controller
+    public class VillaController : Controller
     {
         private readonly IVillaService _villaService;
         private readonly IMapper _mapper;
 
-        public HomeController(IVillaService villaService, IMapper mapper)
+        public VillaController(IVillaService villaService, IMapper mapper)
         {
-            
             _villaService = villaService;
             _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
         {
-
             List<VillaDTO> villaList = new();
 
             try
@@ -40,12 +35,6 @@ namespace RoyalVillaWeb.Controllers
             }
 
             return View(villaList);
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
