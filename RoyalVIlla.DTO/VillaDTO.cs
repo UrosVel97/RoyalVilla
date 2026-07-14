@@ -1,25 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RoyalVIlla.DTO
+namespace RoyalVIlla.DTO;
+
+public class VillaDTO
 {
-    public class VillaDTO
-    {
-       
-        public int Id { get; set; }
+   
+    public int Id { get; set; }
 
-        
-        public required string Name { get; set; }
+    public required string Name { get; set; }
 
-        public string? Details { get; set; }
+    public string? Details { get; set; }
 
-        public double Rate { get; set; }
+    public double Rate { get; set; }
 
-        public int Sqft { get; set; }
+    public int Sqft { get; set; }
 
-        public int Occupancy { get; set; }
+    public int Occupancy { get; set; }
 
-        public string? ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
 
 
-    }
 }

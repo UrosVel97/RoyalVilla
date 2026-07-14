@@ -5,9 +5,10 @@ public class ApiResponse<TData>
     public bool Success { get; set; }
 
     public int StatusCode { get; set; }
+
     public string Message { get; set; } = string.Empty;
 
-    public TData Data { get; set; } =default!;
+    public TData Data { get; set; } = default!;
 
     public object? Errors { get; set; }
 

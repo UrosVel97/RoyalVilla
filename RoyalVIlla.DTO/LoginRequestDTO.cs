@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RoyalVIlla.DTO
-{
-    public class LoginRequestDTO
-    {
-        [Required]
-        [EmailAddress]
-        public required string Email { get; set; }
+namespace RoyalVIlla.DTO;
 
-        [Required]
-        public required string Password { get; set; }
-    }
+public class LoginRequestDTO
+{
+    [Required]
+    [EmailAddress]
+    public required string Email { get; set; }
+
+    [Required]
+    public required string Password { get; set; }
 }
