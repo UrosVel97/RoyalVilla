@@ -132,6 +132,32 @@ a:focus-visible,
   width: 100%;
 }
 
+.villa-navbar__auth {
+  gap: 0.35rem;
+}
+
+.villa-navbar__cta {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 999px;
+  background: var(--rv-forest);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.villa-navbar__cta:hover,
+.villa-navbar__cta:focus {
+  color: #fff;
+  background: var(--rv-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
 /* ---------- Alerts ---------- */
 .villa-alert {
   display: flex;

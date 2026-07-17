@@ -37,7 +37,7 @@ public class BaseService : IBaseService
                 message.Content = JsonContent.Create(apiRequest.Data, options: JsonOptions);
             }
 
-            var apiResponse =await client.SendAsync(message);
+            var apiResponse = await client.SendAsync(message);
 
             return await apiResponse.Content.ReadFromJsonAsync<T>(JsonOptions);
         }

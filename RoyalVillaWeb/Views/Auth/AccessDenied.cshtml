@@ -1,0 +1,26 @@
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="row justify-content-center py-5">
+    <div class="col-12 col-md-8 col-lg-6 text-center">
+        <div class="card border-0 shadow-sm villa-form-card">
+            <div class="card-body p-4 p-md-5">
+                <div class="villa-access-denied__icon mb-3" aria-hidden="true">&#128274;</div>
+                <span class="section-eyebrow">401 &middot; Unauthorized</span>
+                <h1 class="display-6 fw-bold mb-2">Access denied</h1>
+                <p class="text-secondary mb-4">
+                    You don't have permission to view this page. Please sign in with an account
+                    that has the required access, or head back to the homepage.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <a class="btn villa-hero__button" asp-controller="Auth" asp-action="Login">
+                        Sign in
+                        <span aria-hidden="true">→</span>
+                    </a>
+                    <a class="btn btn-light" asp-controller="Home" asp-action="Index">Back to home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

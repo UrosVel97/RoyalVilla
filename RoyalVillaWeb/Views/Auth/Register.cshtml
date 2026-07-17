@@ -1,0 +1,66 @@
+@model RoyalVIlla.DTO.RegistrationRequestDTO
+
+@{
+    ViewData["Title"] = "Register";
+    var roles = new List<string> { "Customer", "Admin" };
+}
+
+<div class="row justify-content-center g-4 py-4">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm villa-form-card">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <span class="section-eyebrow">Join us</span>
+                    <h1 class="h3 fw-bold mb-1">Create your account</h1>
+                    <p class="text-secondary mb-0">Register to start booking exceptional stays.</p>
+                </div>
+
+                <form asp-controller="Auth" asp-action="Register" method="post" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger villa-alert d-none-empty" role="alert"></div>
+
+                    <div class="mb-4">
+                        <label asp-for="Name" class="form-label villa-form-label">Full name</label>
+                        <input asp-for="Name" class="form-control form-control-lg" placeholder="e.g. Jane Doe" autocomplete="name" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Email" class="form-label villa-form-label">Email address</label>
+                        <input asp-for="Email" class="form-control form-control-lg" type="email" placeholder="you@example.com" autocomplete="username" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Password" class="form-label villa-form-label">Password</label>
+                        <input asp-for="Password" class="form-control form-control-lg" type="password" placeholder="Create a password" autocomplete="new-password" />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Role" class="form-label villa-form-label">Account type</label>
+                        <select asp-for="Role" asp-items="@(new SelectList(roles))" class="form-select form-select-lg"></select>
+                        <span asp-validation-for="Role" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-grid gap-2 pt-2">
+                        <button type="submit" class="btn villa-hero__button">
+                            Create account
+                            <span aria-hidden="true">→</span>
+                        </button>
+                    </div>
+                </form>
+
+                <p class="text-center text-secondary small mb-0 mt-4">
+                    Already have an account?
+                    <a asp-controller="Auth" asp-action="Login" class="fw-semibold text-decoration-none">Sign in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
