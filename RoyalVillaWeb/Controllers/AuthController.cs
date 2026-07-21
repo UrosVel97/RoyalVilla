@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using RoyalVIlla.DTO;
 using RoyalVillaWeb.Services.IServices;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace RoyalVillaWeb.Controllers
 {
@@ -23,13 +27,24 @@ namespace RoyalVillaWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = await _authService.LoginAsync<LoginResponseDTO>(loginRequestDTO);
+                var response = await _authService.LoginAsync<ApiResponse<LoginResponseDTO>>(loginRequestDTO);
 
-                if (response != null)
+                if (response != null && response.Success && response.Data != null)
                 {
-                    // Handle successful login, e.g., store token in session or cookie
-                    TempData["success"] = "Login successful!";
-                    return RedirectToAction("Index", "Villa");
+                    LoginResponseDTO loginResponse = response.Data;
+
+                    var handler = new JwtSecurityTokenHandler();
+                    var jwt = handler.ReadJwtToken(loginResponse.Token);
+
+                    var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                    identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(c => c.Type == "email").Value));
+                    identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(c => c.Type == "role").Value));
+
+                    var principal = new ClaimsPrincipal(identity);
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
