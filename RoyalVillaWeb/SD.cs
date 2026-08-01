@@ -1,4 +1,4 @@
-﻿namespace RoyalVillaWeb.Models
+﻿namespace RoyalVillaWeb
 {
     public class SD
     {
@@ -9,5 +9,7 @@
             PUT,
             DELETE
         }
+
+        public const string SessionToken = "JWTToken";
     }
 }

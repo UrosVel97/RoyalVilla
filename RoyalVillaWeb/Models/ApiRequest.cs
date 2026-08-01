@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using static RoyalVillaWeb.Models.SD;
+using static RoyalVillaWeb.SD;
 
 namespace RoyalVillaWeb.Models;
 

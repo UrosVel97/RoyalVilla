@@ -5,6 +5,8 @@ using RoyalVIlla.DTO;
 using RoyalVillaWeb.Services.IServices;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using RoyalVillaWeb;
+
 
 namespace RoyalVillaWeb.Controllers
 {
@@ -44,6 +46,9 @@ namespace RoyalVillaWeb.Controllers
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
+                    HttpContext.Session.SetString(SD.SessionToken, loginResponse.Token);
+
+
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -82,6 +87,12 @@ namespace RoyalVillaWeb.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

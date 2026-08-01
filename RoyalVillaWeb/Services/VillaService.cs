@@ -8,59 +8,55 @@ public class VillaService : BaseService, IVillaService
 {
     private const string ApiEndpoint = "/api/villa";
 
-    public VillaService(IHttpClientFactory httpClient, IConfiguration configuration) : base(httpClient)
+    public VillaService(IHttpClientFactory httpClient, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) 
+        : base(httpClient, httpContextAccessor)
     {
     }
 
-    public Task<T?> CreateAsync<T>(VillaCreateDTO dto, string token)
+    public Task<T?> CreateAsync<T>(VillaCreateDTO dto)
     {
         return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.POST,
             Data = dto,
-            Url = $"{ApiEndpoint}",
-            Token = token
+            Url = $"{ApiEndpoint}"
         });
     }
 
-    public Task<T?> DeleteAsync<T>(int id, string token)
+    public Task<T?> DeleteAsync<T>(int id)
     {
         return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.DELETE,
-            Url = $"{ApiEndpoint}/{id}",
-            Token = token
+            Url = $"{ApiEndpoint}/{id}"
         });
     }
 
-    public Task<T?> GetAllAsync<T>(string token)
+    public Task<T?> GetAllAsync<T>()
     {
         return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.GET,
-            Url = $"{ApiEndpoint}",
-            Token = token
+            Url = $"{ApiEndpoint}"
         });
     }
 
-    public Task<T?> GetAsync<T>(int id, string token)
+    public Task<T?> GetAsync<T>(int id)
     {
         return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.GET,
-            Url = $"{ApiEndpoint}/{id}",
-            Token = token
+            Url = $"{ApiEndpoint}/{id}"
         });
     }
 
-    public Task<T?> UpdateAsync<T>(VillaUpdateDTO dto, string token)
+    public Task<T?> UpdateAsync<T>(VillaUpdateDTO dto)
     {
         return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.PUT,
             Data = dto,
-            Url = $"{ApiEndpoint}/{dto.Id}",
-            Token = token
+            Url = $"{ApiEndpoint}/{dto.Id}"
         });
     }
 }
