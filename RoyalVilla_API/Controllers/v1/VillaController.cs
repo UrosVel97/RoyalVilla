@@ -6,12 +6,13 @@ using RoyalVIlla.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 
-namespace RoyalVilla_API.Controllers;
+namespace RoyalVilla_API.Controllers.v1;
 
 
 
 [ApiController]
-[Route("api/villa")]
+[Route("api/v1/villa")]
+[ApiExplorerSettings(GroupName = "v1")]
 //[Authorize(Roles = "Customer,Admin")]
 public class VillaController : ControllerBase
 {

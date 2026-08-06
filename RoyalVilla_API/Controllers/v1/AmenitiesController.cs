@@ -6,10 +6,11 @@ using RoyalVIlla.DTO;
 using RoyalVilla_API.Data;
 using RoyalVilla_API.Models;
 
-namespace RoyalVilla_API.Controllers;
+namespace RoyalVilla_API.Controllers.v1;
 
-[Route("api/amenities")]
+[Route("api/v1/amenities")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "v1")]
 public class AmenitiesController : ControllerBase
 {
     private readonly IMapper _mapper;

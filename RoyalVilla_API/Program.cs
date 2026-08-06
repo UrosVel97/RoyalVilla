@@ -37,36 +37,39 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers();
 
 
-builder.Services.AddOpenApi(options =>
-{
-    options.AddDocumentTransformer((document, context, cancellationToken) =>
-    {
-        document.Components ??= new();
-        document.Components.SecuritySchemes = new Dictionary<string, IOpenApiSecurityScheme>
-        {
-            ["Bearer"] = new OpenApiSecurityScheme
-            {
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer",
-                BearerFormat = "JWT",
-                Description = "Enter JWT Bearer token"
-            }
-        };
+//builder.Services.AddOpenApi(options =>
+//{
+//    options.AddDocumentTransformer((document, context, cancellationToken) =>
+//    {
+//        document.Components ??= new();
+//        document.Components.SecuritySchemes = new Dictionary<string, IOpenApiSecurityScheme>
+//        {
+//            ["Bearer"] = new OpenApiSecurityScheme
+//            {
+//                Type = SecuritySchemeType.Http,
+//                Scheme = "bearer",
+//                BearerFormat = "JWT",
+//                Description = "Enter JWT Bearer token"
+//            }
+//        };
 
-        document.Security =
-        [
-            new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecuritySchemeReference("Bearer"), new List<string>()
-                }
-            }
-        ];
+//        document.Security =
+//        [
+//            new OpenApiSecurityRequirement
+//            {
+//                {
+//                    new OpenApiSecuritySchemeReference("Bearer"), new List<string>()
+//                }
+//            }
+//        ];
 
-        return Task.CompletedTask;
+//        return Task.CompletedTask;
 
-    });
-});
+//    });
+//});
+
+builder.Services.AddOpenApi("v1");
+builder.Services.AddOpenApi("v2");
 
 builder.Services.AddCors();
 
@@ -99,7 +102,13 @@ await SeedDataAsync(app);
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapScalarApiReference(options =>
+    {
+        options.Title = "Demo - Royal Villa API";
+        options.AddDocument("v1", "Demo API v1", "/openapi/v1.json", isDefault: true)
+               .AddDocument("v2", "Demo API v2", "/openapi/v2.json");
+
+    });
 }
 
 app.UseCors(o => o.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("*"));
