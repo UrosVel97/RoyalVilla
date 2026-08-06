@@ -3,63 +3,67 @@ set -euo pipefail
 
 readonly workspace=/workspaces/RoyalVilla
 readonly runtime_dir=/tmp/royalvilla
+readonly api_log="${runtime_dir}/RoyalVilla API.log"
+readonly web_log="${runtime_dir}/RoyalVilla Web.log"
 
 mkdir -p "${runtime_dir}"
 cd "${workspace}"
 
-is_ready() {
-  curl --fail --silent --show-error "$1" >/dev/null 2>&1
-}
-
-start_service() {
+wait_for_url() {
   local name="$1"
   local url="$2"
-  local port="$3"
-  local project="$4"
-  local log_file="${runtime_dir}/${name}.log"
-  local pid_file="${runtime_dir}/${name}.pid"
+  local process_id="$3"
+  local log_file="$4"
 
-  if is_ready "${url}"; then
-    echo "${name} is already running."
-    return
-  fi
-
-  if [[ -f "${pid_file}" ]]; then
-    local previous_pid
-    previous_pid=$(cat "${pid_file}")
-    if kill -0 "${previous_pid}" 2>/dev/null; then
-      kill "${previous_pid}"
-    fi
-  fi
-
-  nohup setsid env ASPNETCORE_URLS="http://0.0.0.0:${port}" \
-    dotnet run --project "${project}" --no-build --no-launch-profile \
-    >"${log_file}" 2>&1 </dev/null &
-  echo $! >"${pid_file}"
-
-  for _ in {1..60}; do
-    if is_ready "${url}"; then
+  for _ in {1..90}; do
+    if curl --fail --silent "${url}" >/dev/null 2>&1; then
       echo "${name} is ready at ${url}"
       return
     fi
+
+    if ! kill -0 "${process_id}" 2>/dev/null; then
+      break
+    fi
+
     sleep 1
   done
 
-  echo "${name} failed to start. Recent log output:"
-  tail -n 50 "${log_file}"
+  echo "${name} failed to start. Recent log output:" >&2
+  tail -n 100 "${log_file}" >&2
   return 1
 }
 
-start_service \
-  "RoyalVilla API" \
-  "http://localhost:5000/scalar" \
-  "5000" \
-  "RoyalVilla_API/RoyalVilla_API.csproj"
+stop_services() {
+  kill "${api_pid:-}" "${web_pid:-}" 2>/dev/null || true
+}
 
-start_service \
+trap stop_services EXIT INT TERM
+
+dotnet tool restore
+dotnet restore RoyalVilla.slnx
+dotnet build RoyalVilla.slnx --no-restore
+
+env ASPNETCORE_URLS=http://0.0.0.0:5000 \
+  dotnet run --project RoyalVilla_API/RoyalVilla_API.csproj --no-build --no-launch-profile \
+  >"${api_log}" 2>&1 &
+api_pid=$!
+
+wait_for_url \
+  "RoyalVilla API" \
+  "http://localhost:5000/api/v1/villa/1" \
+  "${api_pid}" \
+  "${api_log}"
+
+env ASPNETCORE_URLS=http://0.0.0.0:5079 \
+  dotnet run --project RoyalVillaWeb/RoyalVillaWeb.csproj --no-build --no-launch-profile \
+  >"${web_log}" 2>&1 &
+web_pid=$!
+
+wait_for_url \
   "RoyalVilla Web" \
   "http://localhost:5079" \
-  "5079" \
-  "RoyalVillaWeb/RoyalVillaWeb.csproj"
+  "${web_pid}" \
+  "${web_log}"
 
-echo "Logs are available in ${runtime_dir}."
+echo "RoyalVilla is running. Logs are available in ${runtime_dir}."
+wait "${web_pid}"

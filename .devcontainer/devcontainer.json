@@ -9,9 +9,9 @@
   "workspaceFolder": "/workspaces/RoyalVilla",
   "shutdownAction": "stopCompose",
   "remoteUser": "vscode",
-  "postCreateCommand": "bash .devcontainer/scripts/post-create.sh",
-  "postStartCommand": "bash .devcontainer/scripts/start-apps.sh",
-  "postAttachCommand": "bash .devcontainer/scripts/start-apps.sh",
+  "overrideCommand": false,
+  "postStartCommand": "bash .devcontainer/scripts/wait-for-apps.sh",
+  "postAttachCommand": "bash .devcontainer/scripts/wait-for-apps.sh",
   "waitFor": "postStartCommand",
   "forwardPorts": [
     5079,
@@ -36,6 +36,9 @@
     "cpus": 2,
     "memory": "4gb",
     "storage": "16gb"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/sshd:1": {}
   },
   "customizations": {
     "vscode": {

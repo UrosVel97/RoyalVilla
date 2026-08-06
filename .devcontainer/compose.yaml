@@ -2,7 +2,11 @@ services:
   app:
     image: mcr.microsoft.com/devcontainers/dotnet:2-10.0-noble
     init: true
-    command: sleep infinity
+    user: vscode
+    restart: unless-stopped
+    command:
+      - bash
+      - /workspaces/RoyalVilla/.devcontainer/scripts/start-apps.sh
     volumes:
       - ..:/workspaces/RoyalVilla:cached
     environment:
@@ -15,6 +19,14 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - curl --fail --silent http://localhost:5000/api/v1/villa/1 >/dev/null && curl --fail --silent http://localhost:5079 >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 45s
 
   postgres:
     image: postgres:17-alpine

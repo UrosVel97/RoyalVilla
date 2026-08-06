@@ -6,9 +6,9 @@ Create a Codespace from the `deployment/ubuntu` branch. The container setup auto
 2. Restores tools and NuGet packages.
 3. Builds the complete solution.
 4. Applies EF Core migrations when the API starts.
-5. Starts the API on port `5000` and the MVC application on port `5079`.
+5. Runs the API on port `5000` and the MVC application on port `5079` as persistent container processes.
 
-Port `5079` is forwarded publicly so the running MVC application can be shared. Port `5000` remains private and provides the Scalar API reference at `/scalar` for the Codespace owner.
+Port `5079` is configured for public forwarding so the MVC application can be shared. If a GitHub account or organization policy creates it as private, open the Codespace **Ports** panel, right-click port `5079`, and set **Port Visibility** to **Public**. Port `5000` remains private and provides the Scalar API reference at `/scalar` for the Codespace owner.
 
 Application logs are written inside the app container:
 
