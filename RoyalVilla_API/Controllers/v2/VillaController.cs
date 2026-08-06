@@ -123,7 +123,7 @@ public class VillaController : ControllerBase
 
             _mapper.Map(villaDTO, existingVilla);
 
-            existingVilla.UpdatedDate = DateTime.Now;
+            existingVilla.UpdatedDate = DateTime.UtcNow;
 
 
             _db.Villas.Update(existingVilla);

@@ -73,7 +73,7 @@ public class AuthService : IAuthService
                 Name = requestDTO.Name,
                 Password = requestDTO.Password,
                 Role = string.IsNullOrEmpty(requestDTO.Role) ? "Customer" : requestDTO.Role,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
             };
 
             await _db.Users.AddAsync(user);

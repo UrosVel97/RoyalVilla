@@ -32,6 +32,7 @@ public class VillaController : ControllerBase
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(ApiResponse<List<VillaDTO>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+    [AllowAnonymous]
     public async Task<ActionResult<ApiResponse<IEnumerable<VillaDTO>>>> GetVillas()
     {
         try
@@ -56,7 +57,7 @@ public class VillaController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    //[AllowAnonymous]
+    [AllowAnonymous]
     public async Task<ActionResult<ApiResponse<VillaDTO>>> GetVillaById([FromRoute] int id)
     {
         try
@@ -168,7 +169,7 @@ public class VillaController : ControllerBase
 
             _mapper.Map(villaDTO, existingVilla);
 
-            existingVilla.UpdatedDate = DateTime.Now;
+            existingVilla.UpdatedDate = DateTime.UtcNow;
 
 
             _db.Villas.Update(existingVilla);

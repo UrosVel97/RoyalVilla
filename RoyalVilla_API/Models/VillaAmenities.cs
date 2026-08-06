@@ -14,9 +14,9 @@ namespace RoyalVilla_API.Models
 
         public string? Description { get; set; }
 
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
-        public DateTime UpdatedDate { get; set; } = DateTime.Now;
+        public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
 
         [Required]
         [ForeignKey(nameof(Villa))]
