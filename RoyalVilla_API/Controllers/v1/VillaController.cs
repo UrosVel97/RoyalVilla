@@ -1,18 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RoyalVilla_API.Data;
-using RoyalVilla_API.Models;
-using Microsoft.EntityFrameworkCore;
-using RoyalVIlla.DTO;
+﻿using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using RoyalVIlla.DTO;
+using RoyalVilla_API.Data;
+using RoyalVilla_API.Models;
 
 namespace RoyalVilla_API.Controllers.v1;
 
 
 
 [ApiController]
-[Route("api/v1/villa")]
-[ApiExplorerSettings(GroupName = "v1")]
+[Route("api/v{version:apiVersion}/villa")]
+[ApiVersion("1.0")]
 //[Authorize(Roles = "Customer,Admin")]
 public class VillaController : ControllerBase
 {

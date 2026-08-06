@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoyalVIlla.DTO;
 using RoyalVilla_API.Services;
@@ -7,6 +8,7 @@ namespace RoyalVilla_API.Controllers;
 
 [Route("api/auth")]
 [ApiController]
+[ApiVersionNeutral]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;

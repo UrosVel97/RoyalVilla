@@ -7,11 +7,11 @@ using RoyalVIlla.DTO;
 using RoyalVilla_API.Data;
 using RoyalVilla_API.Models;
 
-namespace RoyalVilla_API.Controllers.v1;
+namespace RoyalVilla_API.Controllers.v2;
 
 [Route("api/v{version:apiVersion}/amenities")]
 [ApiController]
-[ApiVersion("1.0")]
+[ApiVersion("2.0")]
 public class AmenitiesController : ControllerBase
 {
     private readonly IMapper _mapper;
