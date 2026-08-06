@@ -52,7 +52,7 @@ start_service() {
 
 start_service \
   "RoyalVilla API" \
-  "http://localhost:5000/api/v1/villa/1" \
+  "http://localhost:5000/scalar" \
   "5000" \
   "RoyalVilla_API/RoyalVilla_API.csproj"
 
