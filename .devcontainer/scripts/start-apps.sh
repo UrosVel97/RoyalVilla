@@ -32,8 +32,8 @@ start_service() {
     fi
   fi
 
-  nohup env ASPNETCORE_URLS="http://0.0.0.0:${port}" \
-    dotnet run --project "${project}" --no-launch-profile \
+  nohup setsid env ASPNETCORE_URLS="http://0.0.0.0:${port}" \
+    dotnet run --project "${project}" --no-build --no-launch-profile \
     >"${log_file}" 2>&1 </dev/null &
   echo $! >"${pid_file}"
 

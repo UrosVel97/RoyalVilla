@@ -11,7 +11,8 @@
   "remoteUser": "vscode",
   "postCreateCommand": "bash .devcontainer/scripts/post-create.sh",
   "postStartCommand": "bash .devcontainer/scripts/start-apps.sh",
-  "waitFor": "postCreateCommand",
+  "postAttachCommand": "bash .devcontainer/scripts/start-apps.sh",
+  "waitFor": "postStartCommand",
   "forwardPorts": [
     5079,
     5000
