@@ -159,6 +159,8 @@ if (app.Environment.IsDevelopment())
 
 
     });
+
+    app.MapGet("/", () => Results.Redirect("/scalar"));
 }
 
 app.UseCors(o => o.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("*"));
