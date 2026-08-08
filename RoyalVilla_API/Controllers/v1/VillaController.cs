@@ -31,6 +31,7 @@ public class VillaController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(ApiResponse<List<VillaDTO>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+    [AllowAnonymous]
     public async Task<ActionResult<ApiResponse<IEnumerable<VillaDTO>>>> GetVillas()
     {
         try
