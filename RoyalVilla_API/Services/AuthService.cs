@@ -89,7 +89,9 @@ public class AuthService : IAuthService
 
     private string GenerateJwtToken(User user)
     {
-        var key = Encoding.ASCII.GetBytes(_configuration.GetSection("JwtSettings")["Secret"]);
+        var jwtSecret = _configuration["JwtSettings:Secret"]
+            ?? throw new InvalidOperationException("JwtSettings:Secret is not configured.");
+        var key = Encoding.UTF8.GetBytes(jwtSecret);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {

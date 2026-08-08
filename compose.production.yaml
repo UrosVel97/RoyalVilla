@@ -1,0 +1,82 @@
+name: royalvilla
+
+services:
+  web:
+    image: royalvilla-web:${IMAGE_TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: web
+    init: true
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      ServiceUrls__VillaAPI: http://api:8080
+    ports:
+      - "127.0.0.1:${WEB_PORT:-8080}:8080"
+    volumes:
+      - web_data_protection_keys:/home/app/.aspnet/DataProtection-Keys
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - application
+    security_opt:
+      - no-new-privileges:true
+
+  api:
+    image: royalvilla-api:${IMAGE_TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api
+    init: true
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=${POSTGRES_DB:-royalvilla};Username=${POSTGRES_USER:-royalvilla};Password=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      JwtSettings__Secret: ${JWT_SECRET:?Set JWT_SECRET in .env}
+      OpenApi__Enabled: ${OPENAPI_ENABLED:-true}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "${API_PORT:-5000}:8080"
+    networks:
+      - application
+      - database
+    security_opt:
+      - no-new-privileges:true
+
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-royalvilla}
+      POSTGRES_USER: ${POSTGRES_USER:-royalvilla}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - database
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  postgres_data:
+  web_data_protection_keys:
+
+networks:
+  application:
+  database:
+    internal: true
