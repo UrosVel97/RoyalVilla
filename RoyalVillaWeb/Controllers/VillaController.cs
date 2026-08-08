@@ -39,12 +39,14 @@ namespace RoyalVillaWeb.Controllers
             return View(villaList);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(VillaCreateDTO model)
         {
@@ -65,6 +67,7 @@ namespace RoyalVillaWeb.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id)
         {
             var response = await _villaService.GetAsync<ApiResponse<VillaDTO>>(id);
@@ -78,6 +81,7 @@ namespace RoyalVillaWeb.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(VillaUpdateDTO model)
         {
@@ -98,6 +102,7 @@ namespace RoyalVillaWeb.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var villa = _villaService.GetAsync<ApiResponse<VillaDTO>>(id).Result;
@@ -110,6 +115,7 @@ namespace RoyalVillaWeb.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(VillaDTO villa)
         {

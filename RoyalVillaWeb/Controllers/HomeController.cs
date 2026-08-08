@@ -4,7 +4,6 @@ using RoyalVIlla.DTO;
 using RoyalVillaWeb.Models;
 using RoyalVillaWeb.Services.IServices;
 using System.Diagnostics;
-using RoyalVIlla.DTO;
 
 namespace RoyalVillaWeb.Controllers
 {
@@ -40,6 +39,11 @@ namespace RoyalVillaWeb.Controllers
             }
 
             return View(villaList);
+        }
+
+        public IActionResult Project()
+        {
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

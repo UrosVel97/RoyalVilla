@@ -1,0 +1,221 @@
+@{
+    ViewData["Title"] = "Project";
+}
+
+<header class="project-hero mb-4">
+    <div class="project-hero__grid" aria-hidden="true"></div>
+    <div class="row align-items-center g-4 g-lg-5 position-relative">
+        <div class="col-md-7">
+            <span class="project-eyebrow"><span></span>.NET portfolio project</span>
+            <h1>RoyalVilla</h1>
+            <p class="project-hero__title">A versioned Web API with a real MVC client.</p>
+            <p class="project-hero__lead">
+                An end-to-end ASP.NET Core project covering API design, authentication, PostgreSQL
+                persistence, a Razor client, documentation, containers, and VPS deployment.
+            </p>
+            <div class="project-hero__actions">
+                <a class="btn project-button project-button--primary"
+                   href="https://villa.urosvelickovic.dev/"
+                   target="_blank" rel="noopener noreferrer">
+                    Live application <span aria-hidden="true">↗</span>
+                </a>
+                <a class="btn project-button project-button--ghost"
+                   href="https://apivilla.urosvelickovic.dev/scalar/#demo-api-20"
+                   target="_blank" rel="noopener noreferrer">
+                    API reference <span aria-hidden="true">↗</span>
+                </a>
+                <a class="btn project-button project-button--ghost"
+                   href="https://github.com/UrosVel97/RoyalVilla"
+                   target="_blank" rel="noopener noreferrer">
+                    View source
+                    <svg class="project-button__icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill="currentColor" d="M12 .7a11.5 11.5 0 0 0-3.64 22.41c.58.11.79-.25.79-.56v-2.24c-3.22.7-3.9-1.37-3.9-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.72 1.27 3.38.97.1-.75.4-1.27.74-1.56-2.57-.29-5.27-1.28-5.27-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.47.11-3.05 0 0 .97-.31 3.16 1.18a10.98 10.98 0 0 1 5.75 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.58.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.71 5.38-5.29 5.67.42.36.79 1.06.79 2.14v3.18c0 .31.21.68.8.56A11.5 11.5 0 0 0 12 .7Z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="project-live-card">
+                <span class="project-live-card__label"><i></i> Deployed and available</span>
+                <dl>
+                    <div><dt>Focus</dt><dd>Backend / API</dd></div>
+                    <div><dt>Runtime</dt><dd>.NET 10</dd></div>
+                    <div><dt>Data</dt><dd>PostgreSQL</dd></div>
+                    <div><dt>Delivery</dt><dd>Docker + VPS</dd></div>
+                </dl>
+            </div>
+        </div>
+    </div>
+</header>
+
+<nav class="project-jump" aria-label="Project page sections">
+    <a href="#overview">Overview</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#engineering">Engineering</a>
+    <a href="#demo">Demo</a>
+    <a href="#stack">Stack</a>
+</nav>
+
+<section class="project-section project-section--first" id="overview">
+    <div class="project-section__heading">
+        <div>
+            <span class="section-eyebrow">30-second overview</span>
+            <h2 class="project-heading mb-0">What I built and what it demonstrates.</h2>
+        </div>
+        <p>Designed for reviewers who want the purpose, ownership, and technical depth without digging through the repository first.</p>
+    </div>
+
+    <div class="project-overview">
+        <article class="project-overview__brief">
+            <span class="project-label">Project goal</span>
+            <h3>Build the complete delivery path around an ASP.NET Core Web API.</h3>
+            <p>
+                RoyalVilla manages villas and amenities through REST endpoints. A separate MVC application
+                consumes those endpoints, so the API is exercised by a real client rather than existing only
+                as an OpenAPI demo.
+            </p>
+            <p class="mb-0">
+                My scope covered the API, shared contracts, data access, authentication flow, MVC integration,
+                container setup, health checks, documentation, and deployment.
+            </p>
+        </article>
+        <dl class="project-facts">
+            <div><dt>Project type</dt><dd>End-to-end portfolio application</dd></div>
+            <div><dt>Core use case</dt><dd>Villa and amenity management</dd></div>
+            <div><dt>API style</dt><dd>Versioned REST + OpenAPI</dd></div>
+            <div><dt>Client</dt><dd>ASP.NET Core MVC + Razor</dd></div>
+            <div><dt>Deployment</dt><dd>Docker Compose on a VPS</dd></div>
+        </dl>
+    </div>
+</section>
+
+<section class="project-section" id="architecture">
+    <div class="project-section__heading">
+        <div>
+            <span class="section-eyebrow">Architecture</span>
+            <h2 class="project-heading mb-0">Three projects with clear responsibilities.</h2>
+        </div>
+        <p>The MVC client and API share DTO contracts but remain independently deployable applications.</p>
+    </div>
+
+    <div class="project-architecture">
+        <article class="project-architecture__card">
+            <span class="project-architecture__number">01</span>
+            <span class="project-architecture__tag">Client</span>
+            <h3>RoyalVillaWeb</h3>
+            <p>MVC controllers and Razor views call the API through a named HttpClient. Browser sessions use cookie authentication.</p>
+        </article>
+        <article class="project-architecture__card project-architecture__card--accent">
+            <span class="project-architecture__number">02</span>
+            <span class="project-architecture__tag">Application</span>
+            <h3>RoyalVilla_API</h3>
+            <p>Versioned controllers own CRUD behavior, JWT issuance, mapping, response envelopes, and OpenAPI documents.</p>
+        </article>
+        <article class="project-architecture__card">
+            <span class="project-architecture__number">03</span>
+            <span class="project-architecture__tag">Contracts + data</span>
+            <h3>DTO library and PostgreSQL</h3>
+            <p>Shared request and response types keep both apps aligned; EF Core handles persistence, relationships, seed data, and migrations.</p>
+        </article>
+    </div>
+
+    <h3 class="project-subheading">How a villa request moves through the system</h3>
+    <ol class="project-flow">
+        <li><span>01</span><strong>Browser → MVC</strong><p>A Razor page sends the request to an MVC controller.</p></li>
+        <li><span>02</span><strong>MVC → API</strong><p>The service calls <code>/api/v1/villa</code> and forwards the session JWT as a Bearer token.</p></li>
+        <li><span>03</span><strong>API → database</strong><p>The controller queries PostgreSQL asynchronously through EF Core.</p></li>
+        <li><span>04</span><strong>Response → UI</strong><p>AutoMapper creates a DTO, wrapped in <code>ApiResponse&lt;T&gt;</code>, for the Razor view.</p></li>
+    </ol>
+</section>
+
+<section class="project-section" id="engineering">
+    <div class="project-section__heading">
+        <div>
+            <span class="section-eyebrow">Engineering highlights</span>
+            <h2 class="project-heading mb-0">The implementation choices that matter.</h2>
+        </div>
+        <p>A concise view of the backend, client integration, data layer, and delivery work represented in the repository.</p>
+    </div>
+
+    <div class="project-capabilities">
+        <article><span>API DESIGN</span><h3>RESTful CRUD</h3><p>Villa and amenity resources use typed inputs, appropriate status codes, async handlers, and a consistent response envelope.</p></article>
+        <article><span>VERSIONING</span><h3>Side-by-side contracts</h3><p>URL-based v1 and v2 routing generates separate OpenAPI documents and demonstrates API evolution.</p></article>
+        <article><span>AUTH FLOW</span><h3>JWT plus cookies</h3><p>The API issues claims in a JWT; the MVC app signs users into a cookie session and forwards the token to API calls.</p></article>
+        <article><span>DATA</span><h3>EF Core + PostgreSQL</h3><p>Entity relationships, seed data, migrations, and asynchronous queries are isolated behind the API boundary.</p></article>
+        <article><span>CONTRACTS</span><h3>Shared DTO library</h3><p>Request models, response models, and <code>ApiResponse&lt;T&gt;</code> are shared without exposing persistence entities to the client.</p></article>
+        <article><span>DELIVERY</span><h3>Containerized deployment</h3><p>Multi-stage images, Compose networks, persistent volumes, health checks, HTTPS domains, and Dokploy support the live deployment.</p></article>
+    </div>
+</section>
+
+<section class="project-section project-showcase" id="demo">
+    <div class="project-section__heading">
+        <div>
+            <span class="section-eyebrow">Live demo</span>
+            <h2 class="project-heading mb-0">The client and API are both available to review.</h2>
+        </div>
+        <p>Use the MVC application for the user flow or Scalar to inspect endpoints, schemas, and example requests.</p>
+    </div>
+
+    <div class="project-gallery">
+        <figure class="project-shot">
+            <div class="project-shot__bar">
+                <span><i class="project-shot__dot project-shot__dot--red"></i><i class="project-shot__dot project-shot__dot--yellow"></i><i class="project-shot__dot project-shot__dot--green"></i></span>
+                <span class="project-shot__url">villa.urosvelickovic.dev</span>
+                <a href="https://villa.urosvelickovic.dev/" target="_blank" rel="noopener noreferrer">Open ↗</a>
+            </div>
+            <img src="~/images/project/royalvilla-web.png" asp-append-version="true"
+                 alt="RoyalVilla MVC application home page" loading="lazy" />
+            <figcaption>
+                <span>MVC client</span>
+                <div><h3>Villa catalogue and management</h3><p>Responsive Razor views backed entirely by API calls.</p></div>
+            </figcaption>
+        </figure>
+        <figure class="project-shot">
+            <div class="project-shot__bar">
+                <span><i class="project-shot__dot project-shot__dot--red"></i><i class="project-shot__dot project-shot__dot--yellow"></i><i class="project-shot__dot project-shot__dot--green"></i></span>
+                <span class="project-shot__url">apivilla.urosvelickovic.dev/scalar</span>
+                <a href="https://apivilla.urosvelickovic.dev/scalar/#demo-api-20" target="_blank" rel="noopener noreferrer">Open ↗</a>
+            </div>
+            <img src="~/images/project/royalvilla-api.png" asp-append-version="true"
+                 alt="Scalar documentation for the versioned RoyalVilla API" loading="lazy" />
+            <figcaption>
+                <span>API reference</span>
+                <div><h3>Interactive OpenAPI documentation</h3><p>Versioned endpoints, schemas, authentication, and request examples.</p></div>
+            </figcaption>
+        </figure>
+    </div>
+</section>
+
+<section class="project-stack" id="stack">
+    <div>
+        <span class="section-eyebrow">Technology</span>
+        <h2 class="project-heading">The stack and its role.</h2>
+        <p>Each tool has a specific place in the request path or delivery workflow.</p>
+    </div>
+    <dl class="project-stack__list">
+        <div><dt>Platform</dt><dd>.NET 10, ASP.NET Core Web API, MVC, Razor</dd></div>
+        <div><dt>Data</dt><dd>EF Core, Npgsql, PostgreSQL migrations</dd></div>
+        <div><dt>API</dt><dd>JWT Bearer, AutoMapper, API Versioning, OpenAPI, Scalar</dd></div>
+        <div><dt>Delivery</dt><dd>Docker, Compose, health checks, Dokploy, VPS</dd></div>
+    </dl>
+</section>
+
+<section class="project-note">
+    <span class="project-note__mark" aria-hidden="true">i</span>
+    <div class="flex-grow-1">
+        <span class="section-eyebrow">Intentional scope</span>
+        <h2>Focused on Web API development</h2>
+        <p>RoyalVilla is an educational engineering project, not a commercial booking platform. The following limitations are intentional and documented; a production version would address them before release.</p>
+        <div class="project-scope-grid project-scope-grid--single">
+            <div>
+                <h3>Production hardening</h3>
+                <ul>
+                    <li><strong>Password security:</strong> replace plain-text storage with <code>PasswordHasher&lt;TUser&gt;</code> or BCrypt.</li>
+                    <li><strong>Role assignment:</strong> public registration should always assign the <code>Customer</code> role instead of accepting <code>Admin</code> from the request.</li>
+                    <li><strong>API v2:</strong> complete the GET behavior or temporarily remove the unfinished version.</li>
+                    <li><strong>Automated tests:</strong> add unit or integration coverage for authentication and villa CRUD operations.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
