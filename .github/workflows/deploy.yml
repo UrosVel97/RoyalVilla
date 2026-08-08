@@ -16,6 +16,7 @@ jobs:
   deploy:
     name: Trigger production deployment
     runs-on: ubuntu-latest
+    environment: Dokploy
     timeout-minutes: 5
     steps:
       - name: Call Dokploy deployment webhook
