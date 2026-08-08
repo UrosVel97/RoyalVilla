@@ -303,3 +303,17 @@ Do not use real credentials or personal data with this demo.
 
 The live application uses multi-stage .NET images, PostgreSQL, Docker Compose, health checks, persistent volumes, Dokploy, and HTTPS domains on a self-managed VPS. Production secrets are supplied through environment variables and are not stored in the repository.
 
+### Automatic deployment from GitHub
+
+The [Deploy to Dokploy workflow](.github/workflows/deploy.yml) triggers a production deployment after every push to `master`. It can also be started manually from the repository's **Actions** tab.
+
+Configure it once in GitHub:
+
+1. Regenerate the webhook in Dokploy if its URL has ever been exposed.
+2. Open the GitHub repository and go to **Settings** → **Secrets and variables** → **Actions**.
+3. Create a repository secret named `DOKPLOY_WEBHOOK_URL` whose value is the complete Dokploy Compose webhook URL.
+4. Ensure the Dokploy application is configured to deploy the `master` branch.
+5. Merge or push a change to `master`, then monitor **Actions** → **Deploy to Dokploy**.
+
+The workflow does not print the webhook URL or store it in this repository. GitHub masks the secret in workflow logs. The deployment job fails if the secret is missing or Dokploy returns an unsuccessful HTTP status.
+
