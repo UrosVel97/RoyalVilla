@@ -315,5 +315,5 @@ Configure it once in GitHub:
 4. Ensure the Dokploy application is configured to deploy the `master` branch.
 5. Merge or push a change to `master`, then monitor **Actions** → **Deploy to Dokploy**.
 
-The workflow does not print the webhook URL or store it in this repository. GitHub masks the secret in workflow logs. The deployment job fails if the secret is missing or Dokploy returns an unsuccessful HTTP status.
+The workflow does not print the webhook URL or store it in this repository. GitHub masks the secret in workflow logs. It forwards the GitHub push payload required by Dokploy and fails unless Dokploy explicitly confirms that the Compose deployment was queued.
 
