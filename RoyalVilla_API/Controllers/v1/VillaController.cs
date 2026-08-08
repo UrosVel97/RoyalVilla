@@ -14,7 +14,7 @@ namespace RoyalVilla_API.Controllers.v1;
 [ApiController]
 [Route("api/v{version:apiVersion}/villa")]
 [ApiVersion("1.0")]
-//[Authorize(Roles = "Customer,Admin")]
+[Authorize(Roles = "Customer,Admin")]
 public class VillaController : ControllerBase
 {
     private readonly ApplicationDbContext _db;
@@ -29,10 +29,8 @@ public class VillaController : ControllerBase
     #region GET ENDPOINTS
 
     [HttpGet]
-    [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(ApiResponse<List<VillaDTO>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-    [AllowAnonymous]
     public async Task<ActionResult<ApiResponse<IEnumerable<VillaDTO>>>> GetVillas()
     {
         try
@@ -94,6 +92,7 @@ public class VillaController : ControllerBase
     #region POST ENDPOINTS
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(ApiResponse<VillaDTO>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status409Conflict)]
@@ -139,6 +138,7 @@ public class VillaController : ControllerBase
     #region PUT ENDPOINTS
 
     [HttpPut("{id:int}")]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(ApiResponse<VillaDTO>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
@@ -191,6 +191,7 @@ public class VillaController : ControllerBase
     #region DELETE ENDPOINTS
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
