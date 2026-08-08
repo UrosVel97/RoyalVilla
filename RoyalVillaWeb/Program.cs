@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHealthChecks();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -33,10 +34,17 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/auth/accessdenied";
     });
 
+var villaApiUrl = builder.Configuration["ServiceUrls:VillaAPI"]
+    ?? throw new InvalidOperationException("ServiceUrls:VillaAPI is not configured.");
+
+if (!Uri.TryCreate(villaApiUrl, UriKind.Absolute, out var villaApiUri))
+{
+    throw new InvalidOperationException("ServiceUrls:VillaAPI must be an absolute URL.");
+}
+
 builder.Services.AddHttpClient("RoyalVillaAPI", client =>
 {
-    var villaApiUrl = builder.Configuration.GetValue<string>("ServiceUrls:VillaAPI");
-    client.BaseAddress = new Uri(villaApiUrl);
+    client.BaseAddress = villaApiUri;
 
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
@@ -60,6 +68,7 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapHealthChecks("/health");
 app.MapStaticAssets();
 
 app.MapControllerRoute(

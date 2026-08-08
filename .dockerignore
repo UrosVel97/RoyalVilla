@@ -1,0 +1,12 @@
+**/bin/
+**/obj/
+.devcontainer/
+.git/
+.github/
+.vs/
+.vscode/
+.env
+*.log
+*.user
+compose*.yaml
+DEPLOYMENT.md

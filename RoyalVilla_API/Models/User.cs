@@ -22,9 +22,9 @@ namespace RoyalVilla_API.Models
         [MaxLength(50)]
         public required string Role { get; set; } = "Customer";
 
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
-        public DateTime UpdatedDate { get; set; } = DateTime.Now;
+        public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
 
     }
 }

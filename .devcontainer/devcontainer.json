@@ -1,0 +1,51 @@
+{
+  "name": "RoyalVilla",
+  "dockerComposeFile": "compose.yaml",
+  "service": "app",
+  "runServices": [
+    "app",
+    "postgres"
+  ],
+  "workspaceFolder": "/workspaces/RoyalVilla",
+  "shutdownAction": "stopCompose",
+  "remoteUser": "vscode",
+  "overrideCommand": false,
+  "postStartCommand": "bash .devcontainer/scripts/wait-for-apps.sh",
+  "postAttachCommand": "bash .devcontainer/scripts/wait-for-apps.sh",
+  "waitFor": "postStartCommand",
+  "forwardPorts": [
+    5079,
+    5000
+  ],
+  "portsAttributes": {
+    "5079": {
+      "label": "RoyalVilla Web",
+      "onAutoForward": "openBrowser",
+      "visibility": "public"
+    },
+    "5000": {
+      "label": "RoyalVilla API",
+      "onAutoForward": "notify",
+      "visibility": "private"
+    }
+  },
+  "otherPortsAttributes": {
+    "onAutoForward": "ignore"
+  },
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "4gb",
+    "storage": "16gb"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/sshd:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  }
+}

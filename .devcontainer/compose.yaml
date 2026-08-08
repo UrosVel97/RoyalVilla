@@ -1,0 +1,50 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/dotnet:2-10.0-noble
+    init: true
+    user: vscode
+    restart: unless-stopped
+    command:
+      - bash
+      - /workspaces/RoyalVilla/.devcontainer/scripts/start-apps.sh
+    volumes:
+      - ..:/workspaces/RoyalVilla:cached
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=royalvilla;Username=royalvilla;Password=codespaces-demo-only
+      ServiceUrls__VillaAPI: http://localhost:5000
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - curl --fail --silent http://localhost:5000/api/v1/villa/1 >/dev/null && curl --fail --silent http://localhost:5079 >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 45s
+
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: royalvilla
+      POSTGRES_USER: royalvilla
+      POSTGRES_PASSWORD: codespaces-demo-only
+    volumes:
+      - postgres_codespaces_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  postgres_codespaces_data:

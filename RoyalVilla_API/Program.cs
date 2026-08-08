@@ -13,7 +13,13 @@ using Asp.Versioning.ApiExplorer;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JwtSettings")["Secret"]!);
+var jwtSecret = builder.Configuration["JwtSettings:Secret"];
+if (string.IsNullOrWhiteSpace(jwtSecret) || Encoding.UTF8.GetByteCount(jwtSecret) < 32)
+{
+    throw new InvalidOperationException("JwtSettings:Secret must contain at least 32 bytes.");
+}
+
+var key = Encoding.UTF8.GetBytes(jwtSecret);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -37,6 +43,7 @@ builder.Services.AddAuthentication(options =>
 
 
 builder.Services.AddControllers();
+builder.Services.AddHealthChecks();
 
 builder.Services.AddApiVersioning(options =>
 {
@@ -105,8 +112,11 @@ foreach (var descrription in buildProvider.ApiVersionDescriptions)
 
 builder.Services.AddCors();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddAutoMapper(o =>
 {
@@ -131,7 +141,10 @@ var app = builder.Build();
 await SeedDataAsync(app);
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+var openApiEnabled = app.Environment.IsDevelopment()
+    || app.Configuration.GetValue<bool>("OpenApi:Enabled");
+
+if (openApiEnabled)
 {
     app.MapOpenApi("/openapi/{documentName}.json");
     var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
@@ -156,6 +169,8 @@ if (app.Environment.IsDevelopment())
 
 
     });
+
+    app.MapGet("/", () => Results.Redirect("/scalar"));
 }
 
 app.UseCors(o => o.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("*"));
@@ -163,6 +178,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapHealthChecks("/health");
 app.MapControllers();
 
 app.Run();
