@@ -1,6 +1,6 @@
 # GitHub Codespaces
 
-Create a Codespace from the `deployment/ubuntu` branch. The container setup automatically:
+Create a Codespace from the branch you want to run. The container setup automatically:
 
 1. Starts PostgreSQL in a private sibling container.
 2. Restores tools and NuGet packages.
@@ -18,3 +18,5 @@ tail -f /tmp/royalvilla/RoyalVilla\ API.log
 ```
 
 The PostgreSQL credentials in `.devcontainer/compose.yaml` are isolated demo credentials for the disposable Codespace environment. Do not reuse them for deployment.
+
+See the root [README](../README.md#run-in-github-codespaces) for the complete Codespaces walkthrough.
